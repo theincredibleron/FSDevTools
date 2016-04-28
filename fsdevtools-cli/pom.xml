@@ -59,7 +59,11 @@
 			<artifactId>reflections</artifactId>
 			<version>0.9.10</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mdkt.compiler</groupId>
+			<artifactId>InMemoryJavaCompiler</artifactId>
+			<version>1.2</version>
+		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
