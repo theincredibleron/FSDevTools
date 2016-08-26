@@ -25,14 +25,33 @@ package com.espirit.moddev.cli.commands;
 import com.espirit.moddev.cli.api.command.Command;
 import com.github.rvesse.airline.annotations.Option;
 
-import org.mdkt.compiler.InMemoryJavaCompiler;
+import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.tools.DiagnosticListener;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.SimpleJavaFileObject;
+import javax.tools.StandardJavaFileManager;
 
 /**
  * @author e-Spirit AG
@@ -74,8 +93,21 @@ public class ExecuteJavaCommand implements Command {
             String packageName = getPackageNameFromJavCode(source);
 
             String className = sourceFile.getName().replaceAll("\\.java", "");
+            String simpleClassName = className;
             className = packageName + "." + className;
-            Class<?> cls = InMemoryJavaCompiler.compile(className, source);
+
+            JavaCompiler javac = new EclipseCompiler();
+            StandardJavaFileManager sjfm = javac.getStandardFileManager(null, null, null);
+            SpecialClassLoader cl = new SpecialClassLoader();
+            SpecialJavaFileManager fileManager = new SpecialJavaFileManager(sjfm, cl);
+            List options = Collections.emptyList();
+
+            List compilationUnits = Arrays.asList(new MemorySource(simpleClassName, source));
+            DiagnosticListener diagnosticListener = null;
+            Iterable classes = null;
+            JavaCompiler.CompilationTask compile = javac.getTask(new PrintWriter(System.err), fileManager, diagnosticListener, options, classes, compilationUnits);
+            boolean res = compile.call();
+            Class<?> cls = cl.findClass(className);
 
             Object instance = cls.newInstance();
             if(instance instanceof Runnable) {
@@ -85,6 +117,77 @@ public class ExecuteJavaCommand implements Command {
 
         return null;
     }
+    class MemorySource extends SimpleJavaFileObject {
+        private String src;
+        public MemorySource(String name, String src) {
+            super(URI.create("file:///" + name + ".java"), Kind.SOURCE);
+            this.src = src;
+        }
+        public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+            return src;
+        }
+        public OutputStream openOutputStream() {
+            throw new IllegalStateException();
+        }
+        public InputStream openInputStream() {
+            return new ByteArrayInputStream(src.getBytes());
+        }
+    }
+    class MemoryByteCode extends SimpleJavaFileObject {
+        private ByteArrayOutputStream baos;
+        public MemoryByteCode(String name) {
+            super(URI.create("byte:///" + name + ".class"), JavaFileObject.Kind.CLASS);
+        }
+        public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+            throw new IllegalStateException();
+        }
+        public OutputStream openOutputStream() {
+            baos = new ByteArrayOutputStream();
+            return baos;
+        }
+        public InputStream openInputStream() {
+            throw new IllegalStateException();
+        }
+        public byte[] getBytes() {
+            return baos.toByteArray();
+        }
+    }
+    class SpecialClassLoader extends ClassLoader {
+        private Map<String,MemoryByteCode> m = new HashMap<String, MemoryByteCode>();
+
+        protected Class<?> findClass(String name) throws ClassNotFoundException {
+            MemoryByteCode mbc = m.get(name);
+            if (mbc==null){
+                mbc = m.get(name.replace(".","/"));
+                if (mbc==null){
+                    return super.findClass(name);
+                }
+            }
+            return defineClass(name, mbc.getBytes(), 0, mbc.getBytes().length);
+        }
+
+        public void addClass(String name, MemoryByteCode mbc) {
+            m.put(name, mbc);
+        }
+    }
+
+    class SpecialJavaFileManager extends ForwardingJavaFileManager {
+        private SpecialClassLoader xcl;
+        public SpecialJavaFileManager(StandardJavaFileManager sjfm, SpecialClassLoader xcl) {
+            super(sjfm);
+            this.xcl = xcl;
+        }
+        public JavaFileObject getJavaFileForOutput(Location location, String name, JavaFileObject.Kind kind, FileObject sibling) throws IOException {
+            MemoryByteCode mbc = new MemoryByteCode(name);
+            xcl.addClass(name, mbc);
+            return mbc;
+        }
+
+        public ClassLoader getClassLoader(Location location) {
+            return xcl;
+        }
+    }
+
     static String readFile(String path, Charset encoding)
         throws IOException
     {
