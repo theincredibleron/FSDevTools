@@ -147,10 +147,24 @@ public class ProjectExporter {
             );
 
             final List<ExportFile> exportFiles = triggerExport(projectStorage, exportParameters);
-            return downloadExportFilesToFileSystem(projectExportParameters.getProjectExportPath(), projectStorage, exportFiles);
+            final boolean downloadSuccessful = downloadExportFilesToFileSystem(projectExportParameters.getProjectExportPath(), projectStorage, exportFiles);
+            if (downloadSuccessful && projectExportParameters.isDeleteExportFiles()) {
+                deleteExportFiles(projectStorage, exportFiles);
+            }
+            return downloadSuccessful;
         } else {
             LOGGER.error("Project '" + projectName + "' not found on server.");
             return false;
+        }
+    }
+
+    private void deleteExportFiles(ProjectStorage projectStorage, List<ExportFile> exportFiles) {
+        try {
+            for (ExportFile exportFile : exportFiles) {
+                projectStorage.deleteExportFile(exportFile);
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.warn("Export files could not be deleted.", e);
         }
     }
 
@@ -172,7 +186,6 @@ public class ProjectExporter {
 
     protected List<ExportFile> triggerExport(final ProjectStorage projectStorage, final ExportParameters exportParameters) {
         try {
-            LOGGER.info("HELLO!");
             final ServerActionHandle<ExportProgress, Boolean> exportHandle = projectStorage.startExport(exportParameters);
             return waitUntilExportFinished(exportHandle);
         } catch (IOException e) {
