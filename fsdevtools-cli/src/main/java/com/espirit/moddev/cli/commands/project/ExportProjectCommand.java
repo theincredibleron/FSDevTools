@@ -50,7 +50,7 @@ public class ExportProjectCommand extends SimpleCommand<SimpleResult<Boolean>> {
     private String projectExportPath;
     @Option(type = OptionType.COMMAND, name = {"-fpa", "--fsForceProjectActivation"}, description = "Whether to force the project activation if the project is deactivated before export somehow. Default is false.")
     private boolean fsForceProjectActivation;
-    @Option(type = OptionType.COMMAND, name = {"-def", "--deleteExportFile"}, description = "Whether to delete the export files on the server after they have been downloaded.")
+    @Option(type = OptionType.COMMAND, name = {"-def", "--deleteExportFiles"}, description = "Whether to delete the export files on the server after they have been downloaded.")
     private boolean deleteExportFiles;
 
     @Override
