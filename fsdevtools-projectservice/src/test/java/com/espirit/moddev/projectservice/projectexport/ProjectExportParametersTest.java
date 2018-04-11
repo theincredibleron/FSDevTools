@@ -46,7 +46,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
 
         assertThat("Expect equal.", testling, is(notNullValue()));
     }
@@ -61,7 +61,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(emptyProjectName, validProjectExportPath, true, false);
+        testling = new ProjectExportParameters(emptyProjectName, validProjectExportPath, true, false, null, true);
     }
 
     /**
@@ -74,7 +74,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(nullProjectName, validProjectExportPath, true, false);
+        testling = new ProjectExportParameters(nullProjectName, validProjectExportPath, true, false, null, true);
     }
 
     /**
@@ -87,7 +87,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(validProjectName, emptyProjectExportPath, true, false);
+        testling = new ProjectExportParameters(validProjectName, emptyProjectExportPath, true, false, null, true);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(validProjectName, nullProjectExportPath, true, false);
+        testling = new ProjectExportParameters(validProjectName, nullProjectExportPath, true, false, null, true);
     }
 
     /**
@@ -111,7 +111,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
 
         assertThat("Expect equal.", testling.getProjectName(), equalTo(validProjectName));
     }
@@ -124,7 +124,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
 
         assertThat("Expect equal.", testling.getProjectExportPath(), equalTo(validProjectExportPath));
     }
@@ -137,8 +137,36 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
 
         assertThat("Expect equal.", testling.isFsForceProjectActivation(), is(true));
     }
+
+    /**
+     * Test that getMaxRevisionCount returns a long.
+     */
+    @Test
+    public void testGetMaxRevisionCountReturnsALong() {
+        final String validProjectName = "validProjectName";
+        final String validProjectExportPath = "valid/Project/Export/Path";
+
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, 1L, true);
+
+        assertThat("Expect equal.", testling.getMaxRevisionCount().isPresent(), is(true));
+        assertThat("Expect equal.", testling.getMaxRevisionCount().get(), is(1L));
+    }
+
+    /**
+     * Test that isExportDeletedElements returns a boolean.
+     */
+    @Test
+    public void testIsExportDeletedElementsReturnsABoolean() {
+        final String validProjectName = "validProjectName";
+        final String validProjectExportPath = "valid/Project/Export/Path";
+
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
+
+        assertThat("Expect equal.", testling.isExportDeletedElements(), is(true));
+    }
+
 }

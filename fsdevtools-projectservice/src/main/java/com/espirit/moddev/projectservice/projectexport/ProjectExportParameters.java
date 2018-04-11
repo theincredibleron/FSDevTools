@@ -22,17 +22,22 @@
 
 package com.espirit.moddev.projectservice.projectexport;
 
+import java.util.Optional;
+
 /**
  * Class that represents a FirstSpirit project export.
  */
 public class ProjectExportParameters {
 
     private final boolean deleteExportFiles;
-    private String projectName;
-    private String projectExportPath;
+    private final String projectName;
+    private final String projectExportPath;
     private final boolean fsForceProjectActivation;
+    private final Long maxRevisionCount;
+    private final boolean exportDeletedElements;
 
-    public ProjectExportParameters(String projectName, String projectExportPath, boolean fsForceProjectActivation, boolean deleteExportFiles) {
+    public ProjectExportParameters(String projectName, String projectExportPath, boolean fsForceProjectActivation, boolean deleteExportFiles,
+                                   Long maxRevisionCount, boolean exportDeletedElements) {
         if(projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Project name should not be null or empty");
         }
@@ -44,6 +49,8 @@ public class ProjectExportParameters {
         this.projectExportPath = projectExportPath;
         this.fsForceProjectActivation = fsForceProjectActivation;
         this.deleteExportFiles = deleteExportFiles;
+        this.maxRevisionCount = maxRevisionCount;
+        this.exportDeletedElements = exportDeletedElements;
     }
 
     /**
@@ -72,5 +79,19 @@ public class ProjectExportParameters {
      */
     public boolean isDeleteExportFiles() {
         return deleteExportFiles;
+    }
+
+    /**
+     * @return the maximum number of revisions to export or -1 if all revisions should be exported.
+     */
+    public Optional<Long> getMaxRevisionCount() {
+        return Optional.ofNullable(maxRevisionCount);
+    }
+
+    /**
+     * @return {@code true} if deleted elements should also be exported, {@code false} otherwise.
+     */
+    public boolean isExportDeletedElements() {
+        return exportDeletedElements;
     }
 }
