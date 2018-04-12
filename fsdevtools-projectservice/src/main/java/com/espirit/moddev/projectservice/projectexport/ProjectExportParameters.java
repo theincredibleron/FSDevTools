@@ -22,22 +22,36 @@
 
 package com.espirit.moddev.projectservice.projectexport;
 
-import java.util.Optional;
-
 /**
  * Class that represents a FirstSpirit project export.
  */
 public class ProjectExportParameters {
 
+    /**
+     * This constant value used as maxRevisionCount for the FirstSpirit export
+     * means that all revisions should be part of the export.
+     */
+    public static long UNLIMITED_REVISIONS = -1L;
+
     private final boolean deleteExportFiles;
     private final String projectName;
     private final String projectExportPath;
     private final boolean fsForceProjectActivation;
-    private final Long maxRevisionCount;
+    private final long maxRevisionCount;
     private final boolean exportDeletedElements;
 
+    /**
+     * Creates a parameter object that describes how a project export should happen.
+     *
+     * @param projectName the project's name that should be exported
+     * @param projectExportPath the path where the project should be exported into
+     * @param fsForceProjectActivation whether the project's activation should be forced or not
+     * @param deleteExportFiles whether internal export files should be deleted after export
+     * @param maxRevisionCount states how many revisions should be part of the export. Pass @{value UNLIMITED_REVISIONS} for unlimited revisions.
+     * @param exportDeletedElements whether deleted elements should be part of the export or not
+     */
     public ProjectExportParameters(String projectName, String projectExportPath, boolean fsForceProjectActivation, boolean deleteExportFiles,
-                                   Long maxRevisionCount, boolean exportDeletedElements) {
+                                   long maxRevisionCount, boolean exportDeletedElements) {
         if(projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Project name should not be null or empty");
         }
@@ -84,8 +98,8 @@ public class ProjectExportParameters {
     /**
      * @return the maximum number of revisions to export or -1 if all revisions should be exported.
      */
-    public Optional<Long> getMaxRevisionCount() {
-        return Optional.ofNullable(maxRevisionCount);
+    public long getMaxRevisionCount() {
+        return maxRevisionCount;
     }
 
     /**

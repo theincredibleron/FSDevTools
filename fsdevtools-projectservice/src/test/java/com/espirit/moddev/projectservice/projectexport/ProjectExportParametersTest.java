@@ -26,6 +26,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static com.espirit.moddev.projectservice.projectexport.ProjectExportParameters.UNLIMITED_REVISIONS;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -46,7 +47,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
 
         assertThat("Expect equal.", testling, is(notNullValue()));
     }
@@ -61,7 +62,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(emptyProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(emptyProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
     }
 
     /**
@@ -74,7 +75,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(nullProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(nullProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
     }
 
     /**
@@ -87,7 +88,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(validProjectName, emptyProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, emptyProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
     }
 
     /**
@@ -100,7 +101,7 @@ public class ProjectExportParametersTest {
 
         exception.expect(IllegalArgumentException.class);
 
-        testling = new ProjectExportParameters(validProjectName, nullProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, nullProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
     }
 
     /**
@@ -111,7 +112,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
 
         assertThat("Expect equal.", testling.getProjectName(), equalTo(validProjectName));
     }
@@ -124,7 +125,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
 
         assertThat("Expect equal.", testling.getProjectExportPath(), equalTo(validProjectExportPath));
     }
@@ -137,7 +138,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
 
         assertThat("Expect equal.", testling.isFsForceProjectActivation(), is(true));
     }
@@ -152,8 +153,7 @@ public class ProjectExportParametersTest {
 
         testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, 1L, true);
 
-        assertThat("Expect equal.", testling.getMaxRevisionCount().isPresent(), is(true));
-        assertThat("Expect equal.", testling.getMaxRevisionCount().get(), is(1L));
+        assertThat("Expect equal.", testling.getMaxRevisionCount(), is(1L));
     }
 
     /**
@@ -164,7 +164,7 @@ public class ProjectExportParametersTest {
         final String validProjectName = "validProjectName";
         final String validProjectExportPath = "valid/Project/Export/Path";
 
-        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, null, true);
+        testling = new ProjectExportParameters(validProjectName, validProjectExportPath, true, false, UNLIMITED_REVISIONS, true);
 
         assertThat("Expect equal.", testling.isExportDeletedElements(), is(true));
     }

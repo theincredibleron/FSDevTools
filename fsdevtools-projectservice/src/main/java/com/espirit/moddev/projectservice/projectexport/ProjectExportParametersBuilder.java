@@ -22,6 +22,8 @@
 
 package com.espirit.moddev.projectservice.projectexport;
 
+import static com.espirit.moddev.projectservice.projectexport.ProjectExportParameters.UNLIMITED_REVISIONS;
+
 /**
  * Class that build ProjectExportParameters
  */
@@ -30,7 +32,7 @@ public class ProjectExportParametersBuilder {
     private String projectExportPath;
     private boolean fsForceProjectActivation;
     private boolean deleteExportFiles;
-    private long maxRevisionCount = -1;
+    private long maxRevisionCount = UNLIMITED_REVISIONS;
     private boolean exportDeletedElements;
 
     /**

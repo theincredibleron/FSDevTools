@@ -147,7 +147,8 @@ public class ProjectExporter {
             );
 
             exportParameters.setExportDeletedElements(projectExportParameters.isExportDeletedElements());
-            projectExportParameters.getMaxRevisionCount().ifPresent(exportParameters::setMaxRevisionCount);
+            exportParameters.setMaxRevisionCount(projectExportParameters.getMaxRevisionCount());
+
 
             final List<ExportFile> exportFiles = triggerExport(projectStorage, exportParameters);
             final boolean downloadSuccessful = downloadExportFilesToFileSystem(projectExportParameters.getProjectExportPath(), projectStorage, exportFiles);
