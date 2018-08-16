@@ -346,7 +346,7 @@
             </dependency>
             <dependency>
                 <groupId>de.espirit.firstspirit</groupId>
-                <artifactId>fs-access</artifactId>
+                <artifactId>fs-isolated-runtime</artifactId>
                 <version>${firstspirit.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -447,7 +447,7 @@
                 </property>
             </activation>
             <properties>
-                <firstspirit.version>5.2.2109</firstspirit.version>
+                <firstspirit.version>5.2.180705</firstspirit.version>
             </properties>
         </profile>
         <profile>

@@ -22,7 +22,7 @@
 
 package com.espirit.moddev.cli;
 
-import com.google.common.base.Stopwatch;
+import org.apache.commons.lang3.time.StopWatch;
 
 import com.espirit.moddev.cli.api.CliContext;
 import com.espirit.moddev.cli.api.command.Command;
@@ -127,7 +127,7 @@ public final class Cli {
 
         final CliBuilder<Command> builder = getDefaultCliBuilder();
         final Command command = parseCommandLine(args, builder);
-        Stopwatch stopwatch = new Stopwatch();
+        StopWatch stopwatch = new StopWatch();
         stopwatch.start();
         try {
             executeCommand(command);
@@ -139,8 +139,8 @@ public final class Cli {
         }
     }
 
-    private static void logExecutionTime(final Stopwatch stopwatch) {
-        double milliseconds = stopwatch.elapsedTime(TimeUnit.MILLISECONDS);
+    private static void logExecutionTime(final StopWatch stopwatch) {
+        double milliseconds = stopwatch.getTime();
         final String executionTime = String.format("Execution time: %ss", milliseconds / CliConstants.ONE_SECOND_IN_MILLIS.valueAsInt());
         LOGGER.info(executionTime);
     }
