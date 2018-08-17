@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static com.espirit.moddev.core.StringUtils.isNullOrEmpty;
+import static com.espirit.moddev.shared.StringUtils.isNullOrEmpty;
 
 /**
  * Installs a module on a FirstSpirit server. Provides mechanisms to configure project apps, webapps

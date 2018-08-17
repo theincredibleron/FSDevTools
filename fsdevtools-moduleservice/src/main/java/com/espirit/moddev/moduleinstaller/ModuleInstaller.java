@@ -1,6 +1,8 @@
 package com.espirit.moddev.moduleinstaller;
 
-import com.google.common.base.Strings;
+import com.espirit.moddev.shared.StringUtils;
+
+import de.espirit.common.StringUtil;
 import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.access.store.LockException;
@@ -154,7 +156,7 @@ public class ModuleInstaller {
         if (type.equals(SERVICE)) {
             fs = moduleAdminAgent.getServiceConfig(componentDescriptor.getName());
         } else if (type.equals(ComponentDescriptor.Type.PROJECTAPP)) {
-            if(Strings.isNullOrEmpty(projectName)) {
+            if(StringUtils.isNullOrEmpty(projectName)) {
                 throw new IllegalArgumentException("No project given, can't get a project app configuration!");
             }
             fs = moduleAdminAgent.getProjectAppConfig(moduleName, componentDescriptor.getName(), connection.getProjectByName(projectName));
@@ -184,7 +186,7 @@ public class ModuleInstaller {
         List<ComponentDescriptor> projectAppDescriptors = stream(moduleDescriptor.get().getComponents()).filter(it -> it instanceof ProjectAppDescriptor).collect(toList());
 
         String projectName = parameters.getProjectName();
-        if(Strings.isNullOrEmpty(projectName)) {
+        if(StringUtils.isNullOrEmpty(projectName)) {
             if(!projectAppDescriptors.isEmpty()) {
                 LOGGER.warn("Found project app descriptors, but can't install project apps without a project name given!");
             }
@@ -281,7 +283,7 @@ public class ModuleInstaller {
         try {
 
             Project projectOrNull = null;
-            if(!Strings.isNullOrEmpty(projectName)) {
+            if(!StringUtils.isNullOrEmpty(projectName)) {
                 projectOrNull = connection.getProjectByName(projectName);
             }
 
@@ -336,7 +338,7 @@ public class ModuleInstaller {
                                                       Map<WebAppIdentifier, File> webAppConfigurations,
                                                       ComponentDescriptor componentDescriptor,
                                                       WebAppIdentifier scope) {
-        Project projectOrNull = Strings.isNullOrEmpty(projectName) ? null : connection.getProjectByName(projectName);
+        Project projectOrNull = StringUtils.isNullOrEmpty(projectName) ? null : connection.getProjectByName(projectName);
         try {
             WebAppId id = scope.createWebAppId(projectOrNull);
             moduleAdminAgent.installWebApp(moduleName, componentDescriptor.getName(), id);
@@ -363,7 +365,7 @@ public class ModuleInstaller {
             try {
                 project.lock();
                 String selectedWebServer = project.getSelectedWebServer(webScope.toString());
-                if(Strings.isNullOrEmpty(selectedWebServer)) {
+                if(StringUtils.isNullOrEmpty(selectedWebServer)) {
                     LOGGER.warn("Project has no webserver selected. Setting usage of InternalJetty.");
                     selectedWebServer = "InternalJetty";
                     project.setSelectedWebServer(webAppId, selectedWebServer);
