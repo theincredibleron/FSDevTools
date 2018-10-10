@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
                 "service restart  -n UXBService,AnotherService"
         },
         descriptions = {
-                "Simply restarts the all services those have auto start enabled",
+                "Simply restarts the all services that have auto start enabled",
                 "Simply restarts the service: 'UXBService'",
                 "Simply restarts the services: 'UXBService' and 'AnotherService'"
         })

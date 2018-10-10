@@ -24,7 +24,7 @@ public abstract class ServiceProcessCommand extends SimpleCommand<SimpleResult<B
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceProcessCommand.class);
 
-    @Option(type = OptionType.COMMAND, name = {"-n", "--serviceNames"}, description = "Comma separated list of Names of the FirstSpirit services to be restarted. Optional. If not provided, all services with auto start enabled will be restarted")
+    @Option(type = OptionType.COMMAND, name = {"-n", "--serviceNames"}, description = "Comma separated list of Names of the FirstSpirit services to be processed. Optional. If not provided, all services with auto start enabled will be processed.")
     private String serviceNames;
 
     @Override

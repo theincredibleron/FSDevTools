@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
                 "service start  -n UXBService,AnotherService"
         },
         descriptions = {
-                "Simply start the all services those have auto start enabled and currently not running",
+                "Simply start the all services that have auto start enabled and are currently not running",
                 "Simply start the service: 'UXBService' if it's currently not running",
-                "Simply start the services: 'UXBService' and 'AnotherService' if they currently not running"
+                "Simply start the services: 'UXBService' and 'AnotherService' if they are currently not running"
         })
 
 public class ServiceStartCommand extends ServiceProcessCommand {
@@ -54,7 +54,7 @@ public class ServiceStartCommand extends ServiceProcessCommand {
     @Override
     protected void processService(final ServiceManager serviceManager, final String serviceName) {
         if (serviceManager.isServiceRunning(serviceName)) {
-            LOGGER.info("Service: '{}' is running and don't need to be started!", serviceName);
+            LOGGER.info("Service: '{}' is running and does not need to be started!", serviceName);
         } else {
             LOGGER.info("Try to start service: '{}'...", serviceName);
             serviceManager.startService(serviceName);

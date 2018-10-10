@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
                 "service stop  -n UXBService,AnotherService"
         },
         descriptions = {
-                "Simply stop the all services those have auto start enabled and currently running",
+                "Simply stop the all services that have auto start enabled and currently running",
                 "Simply stop the service: 'UXBService' if it's currently running",
-                "Simply stop the services: 'UXBService' and 'AnotherService' if they currently running"
+                "Simply stop the services: 'UXBService' and 'AnotherService' if they are currently running"
         })
 
 public class ServiceStopCommand extends ServiceProcessCommand {

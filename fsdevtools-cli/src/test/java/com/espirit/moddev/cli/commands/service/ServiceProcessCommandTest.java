@@ -122,7 +122,7 @@ public class ServiceProcessCommandTest {
         spyTestling.getServiceManager(mockConnection);
 
         // Assert
-        fail("Should trow exception");
+        fail("Should throw exception");
     }
 
     /**
